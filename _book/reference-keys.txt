@@ -1,4 +1,8 @@
-url-your-book-url-like-httpsbookdown.orgyihuibookdown
+fig:nice-fig
+tab:nice-tab
+eq:binom
+thm:tri
+about
 usage
 render-book
 preview-book
@@ -19,8 +23,3 @@ sharing-your-book
 publishing
 pages
 metadata-for-sharing
-fig:nice-fig
-tab:nice-tab
-eq:binom
-thm:tri
-about
