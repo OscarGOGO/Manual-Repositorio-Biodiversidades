@@ -1,57 +1,64 @@
---- 
-title: "A Minimal Book Example"
-author: "John Doe"
-date: "2023-01-02"
+---
+title: "Notas backend BiodiversidadES"
+author: "Oscar Godínez Gómez"
+date: "2023-01-04"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
 # url: your book url like https://bookdown.org/yihui/bookdown
-# cover-image: path to the social sharing image like images/cover.jpg
-description: |
-  This is a minimal example of using the bookdown package to write a book.
-  The HTML output format for this example is bookdown::bs4_book,
-  set in the _output.yml file.
+description:
 biblio-style: apalike
 csl: chicago-fullnote-bibliography.csl
 ---
 
-# About
+# Biodiversidades
 
-This is a _sample_ book written in **Markdown**. You can use anything that Pandoc's Markdown supports; for example, a math equation $a^2 + b^2 = c^2$.
+![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/BiodiversidadES3.png){width="400"}
 
-## Usage 
+# Git
 
-Each **bookdown** chapter is an .Rmd file, and each .Rmd file can contain one (and only one) chapter. A chapter *must* start with a first-level heading: `# A good chapter`, and can contain one (and only one) first-level heading.
+## Instalar git y configurar
 
-Use second-level and higher headings within chapters like: `## A short section` or `### An even shorter section`.
+**1. Crear cuenta en GitLab o GitHub**
 
-The `index.Rmd` file is required, and is also your first book chapter. It will be the homepage when you render the book.
+**2. Instalar Git:** <https://git-scm.com/>
 
-## Render book
+**3. Abrir Git bash**
 
-You can render the HTML version of this example book without changing anything:
+**4. Configurar Usename escribiendo:**
 
-1. Find the **Build** pane in the RStudio IDE, and
+`git config –-global user.name "tu user name"`
 
-1. Click on **Build Book**, then select your output format, or select "All formats" if you'd like to use multiple formats from the same book source files.
+![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/24.png){width="600"}
 
-Or build the book from the R console:
+**5. Configurar correo escribiendo:**
 
+`git config –-global user.email "tu user email"`
 
-```r
-bookdown::render_book()
-```
+![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/25.png){width="600"}
 
-To render this example to PDF as a `bookdown::pdf_book`, you'll need to install XeLaTeX. You are recommended to install TinyTeX (which includes XeLaTeX): <https://yihui.org/tinytex/>.
+**6. Corroborar que se grabó el user name y correo con (Si se necesita puedes salir escribiendo laletra q y enter):**
 
-## Preview book
+`git config –-list`
 
-As you work, you may start a local server to live preview this HTML book. This preview will update as you edit the book when you save individual .Rmd files. You can start the server in a work session by using the RStudio add-in "Preview book", or from the R console:
+## Git, GitLab y RStudio
 
+**1. Abrimos RStudio**
 
-```r
-bookdown::serve_book()
-```
+**2. Nos dirigimos a la pestaña de Tools -\> Global options -\> Git/SVN** ![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/26.png){width="600"}
 
+**3. Generamos una llave SSH (Solo se necesita hacer una ocasión) y la copiamos**
+
+![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/27.png){width="400"} ![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/28.png){width="400"}
+
+**4. Abrimos GitLab y nos dirigimos a Preferences o User settings -\> SSH Keys** ![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/29.png){width="600"}
+
+**5. Pegamos el código anterior en la opción key**
+
+**6. Le damos un título y retiramos la fecha de expiración.** /
+
+![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/30.png){width="600"}
+
+**7. Finalmente, damos click en Add Key**
 
 
