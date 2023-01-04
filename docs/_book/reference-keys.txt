@@ -7,4 +7,3 @@ generar-nuevo-proyecto-gitlab-o-repositorio-github
 crear-proyecto-en-rstudio
 push
 pull
-url-your-book-url-like-httpsbookdown.orgyihuibookdown

@@ -13,7 +13,7 @@ csl: chicago-fullnote-bibliography.csl
 
 # Biodiversidades
 
-![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/BiodiversidadES3.png){width = "600"}
+![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/BiodiversidadES3.png){width="400"}
 
 # Git
 
@@ -31,44 +31,34 @@ csl: chicago-fullnote-bibliography.csl
 
 ![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/24.png){width="600"}
 
-**5.  Configurar correo escribiendo:**
+**5. Configurar correo escribiendo:**
 
 `git config –-global user.email "tu user email"`
 
 ![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/25.png){width="600"}
 
-**6.  Corroborar que se grabó el user name y correo con (Si se necesita puedes salir escribiendo laletra q y enter):**
+**6. Corroborar que se grabó el user name y correo con (Si se necesita puedes salir escribiendo laletra q y enter):**
 
 `git config –-list`
-
 
 ## Git, GitLab y RStudio
 
 **1. Abrimos RStudio**
 
-**2. Nos dirigimos a la pestaña de Tools -> Global options -> Git/SVN**
-![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/26.png){width="600"}
-
+**2. Nos dirigimos a la pestaña de Tools -\> Global options -\> Git/SVN** ![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/26.png){width="600"}
 
 **3. Generamos una llave SSH (Solo se necesita hacer una ocasión) y la copiamos**
 
-![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/27.png){width="400"}
-![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/28.png){width="400"}
+![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/27.png){width="400"} ![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/28.png){width="400"}
 
-
-**4. Abrimos GitLab y nos dirigimos a Preferences o User settings -> SSH Keys**
-![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/29.png){width="600"}
-
+**4. Abrimos GitLab y nos dirigimos a Preferences o User settings -\> SSH Keys** ![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/29.png){width="600"}
 
 **5. Pegamos el código anterior en la opción key**
 
-**6. Le damos un título y retiramos la fecha de expiración. **/
+**6. Le damos un título y retiramos la fecha de expiración.** /
 
 ![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/30.png){width="600"}
 
-
-
 **7. Finalmente, damos click en Add Key**
-
 
 
