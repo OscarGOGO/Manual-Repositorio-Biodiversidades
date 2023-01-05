@@ -1,14 +1,20 @@
 # GitLab GitHub
 
-## Generar nuevo proyecto (GitLab) o repositorio (GitHub):
-
-![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/images/0b.png){width="591"} ![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/images/0c.png){width="589"}
+## Generar nuevo proyecto (GitLab) o repositorio (GitHub)
 
 **1. GitLab, crear nuevo repositorio.**
 
-![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/images/0.png){width="600"}
+![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/images/0b.png){width="591"}
+![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/images/0c.png){width="589"}
+Paso 1. Crear nuevo repositorio en GitLab
 
-**Paso 1.** GitHub, crear nuevo repositorio
+
+
+![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/images/0.png){width="600"}
+Paso 1. Crear nuevo repositorio en GitHub
+
+
+
 
 **2. Configurar proyecto o repositorio**
 
@@ -23,12 +29,14 @@ Se deben considerar al menos 4 cosas:
 4.  Click crear :P
 
 ![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/images/1b.png){width="604"}
-
 **Paso 2.** GitLab
 
-![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/images/1.png){width="600"}
 
-**Paso 2.** GitHub
+![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/images/1.png){width="600"}
+Paso 2. GitHub
+
+
+
 
 ## Crear proyecto en RStudio
 
@@ -54,6 +62,8 @@ Se deben considerar al menos 4 cosas:
 
 ![**Ver pestaña de Git**](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/images/8.png){width="600"}
 
+
+
 ## PUSH
 
 **1. Crear un nuevo archivo de R y colocar cualquier cosa, por ejemplo, crear el script de R `test.R`**
@@ -73,6 +83,8 @@ Se deben considerar al menos 4 cosas:
 ![Ver pestaña de Git](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/images/15.png){width="600"}
 
 ![Ver pestaña de Git](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/images/16.png){width="600"}
+
+
 
 ## PULL
 
