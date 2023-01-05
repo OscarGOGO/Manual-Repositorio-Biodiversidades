@@ -1,4 +1,3 @@
-biodiversidades
 git
 instalar-git-y-configurar
 git-gitlab-y-rstudio
