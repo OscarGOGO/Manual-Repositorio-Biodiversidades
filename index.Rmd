@@ -9,6 +9,7 @@ url: https://oscargogo.github.io/Libro_Prueba/
 description: "En este libro de prueba se documenta parte del backend de Biodiversidades"
 biblio-style: apalike
 csl: chicago-fullnote-bibliography.csl
+cover-image: BiodiversidadES3.png
 ---
 
 # Biodiversidades {.unnumbered}
