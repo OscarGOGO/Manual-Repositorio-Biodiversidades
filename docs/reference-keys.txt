@@ -7,4 +7,5 @@ crear-proyecto-en-rstudio
 push
 pull
 organización-de-documentos-y-carpetas-en-el-repositorio
-repositorio
+ventajas
+organización-de-documentos-y-carpetas-en-el-dico-duro-gap
