@@ -6,3 +6,5 @@ generar-nuevo-proyecto-gitlab-o-repositorio-github
 crear-proyecto-en-rstudio
 push
 pull
+organización-de-documentos-y-carpetas-en-el-repositorio
+repositorio

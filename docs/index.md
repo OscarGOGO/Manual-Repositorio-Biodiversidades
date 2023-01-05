@@ -16,4 +16,4 @@ cover-image: BiodiversidadES3.png
 
 ![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/images/BiodiversidadES3.png){width="700"}
 
-En este libro de prueba se documenta parte del backend de Biodiversidades
+En este manual de prueba se documenta parte del backend de Biodiversidades
