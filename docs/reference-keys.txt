@@ -9,3 +9,6 @@ pull
 organización-de-documentos-y-carpetas-en-el-repositorio
 ventajas
 organización-de-documentos-y-carpetas-en-el-dico-duro-gap
+loops-en-r
+apply
+for
