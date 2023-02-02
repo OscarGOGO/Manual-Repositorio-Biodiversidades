@@ -1,7 +1,7 @@
 ---
 title: "Notas backend BiodiversidadES"
 author: "Oscar Godínez Gómez"
-date: "2023-02-01"
+date: "2023-02-02"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
