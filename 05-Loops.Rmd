@@ -13,9 +13,9 @@ DT::datatable(iris)
 
 Aplicas instrucciones a filas o columnas de un data.frame o matriz.
 
-![](images/apply_1.PNG)
+![](images/apply_1.PNG){width="547"}
 
-<video width="320" height="240" controls>
+<video width="500" height="400" controls>
 
 <source src="images/apply_2.mp4" type="video/mp4">
 
@@ -154,7 +154,7 @@ prueba
 ## sapply()
 sapply trabaja con vectores o listas y las salidas usuales pueden ser matrices, con varios array, una lista o un vector, es decir, puede hacer de todo!
 
-![](images/sapply_1.PNG)
+![](images/sapply_1.PNG){width="547"}
 
 
 Veamos algunas de sus aplicaciones más comunes.
@@ -219,6 +219,13 @@ sapply(1:3, function(x){
 ## lapply()
 
 La función lapply es una de las funciones más usadas en R, permite realizar iteraciones sobre una lista, array o vector y devuelve siempre una lista. Esto tiene varias ventajas, por ejemplo, que puedes guardar cualquier tipo clase de R.
+
+
+![](images/lapply_1.PNG){width="547"}
+
+
+![](images/lapply_2.PNG){width="547"}
+
 
 **Vector**
 ```{r}
