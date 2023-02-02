@@ -253,6 +253,22 @@ lapply(1:3, function(x){
 })
 ```
   
+ 
+Para colapsar la lista en un unico data.frame podemos usar la función `do.call()`
+
+```{r}
+lapply(1:3, function(x){
+  x.1 <- iris[iris$Species == unique(iris$Species)[[x]],]
+  x.1 <- data.frame("Especie" = as.character(unique(iris$Species)[[x]]), 
+           "MSepal.Length" = mean(x.1$Sepal.Length),
+           "SDSepal.Length" = sd(x.1$Sepal.Length))  
+  
+  return(x.1)
+}) %>% do.call(rbind, .)
+```
+
+
+
   
 **lista**
 ```{r}
