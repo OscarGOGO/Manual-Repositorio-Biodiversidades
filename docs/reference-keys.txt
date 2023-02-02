@@ -12,3 +12,6 @@ organización-de-documentos-y-carpetas-en-el-dico-duro-gap
 loops-en-r
 apply
 for
+loops-en-r.-funciones-base-de-r
+sapply
+lapply

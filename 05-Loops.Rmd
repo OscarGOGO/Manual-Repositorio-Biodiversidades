@@ -1,4 +1,4 @@
-# Loops en R
+# Loops en R. Funciones base de R
 
 ('"Looping", "cycling", "iterating" or just replicating instructions')
 
@@ -67,7 +67,6 @@ apply(iris[,1:4], 2, function(x){
 
 **3) Si el resultado es mayor a 1000 que devuelva un 0**
 
-
 ## for()
 
 Sirve para repetir n veces una o más instrucciones. La estructura es:
@@ -76,7 +75,7 @@ Sirve para repetir n veces una o más instrucciones. La estructura es:
 
 ![](images/For_2.PNG){width="467"}
 
-En el siguiente ejemplo usaremos for() para obtener un boxplot para cada variable de pétalo y sépalo.
+En el siguiente ejemplo usaremos `for()` para obtener un boxplot para cada variable de pétalo y sépalo.
 
 **Solución 1.**
 
@@ -144,7 +143,121 @@ for(i in 1:3){
 prueba
 ```
 
+Para colapsar la lista en un unico objeto podemos usar la función `do.call()`
+
 ```{r}
 prueba <- do.call(rbind, prueba)
 prueba
 ```
+
+
+## sapply()
+sapply trabaja con vectores o listas y las salidas usuales pueden ser matrices, con varios array, una lista o un vector, es decir, puede hacer de todo!
+
+![](images/sapply_1.PNG)
+
+
+Veamos algunas de sus aplicaciones más comunes.
+
+**1.** Obtener un vector numérico. Estimar la media para cada variable del conjunto de datos iris.
+
+```{r}
+sapply(1:4, function(x){mean(iris[[x]])})
+```
+
+**2.** Obtener una matriz con arrays que puedes transformar a data.frame. Ojo el resultado de iteración lo agrega en una "columna". 
+
+```{r}
+sapply(1:3, function(x){
+  x.1 <- iris[iris$Species == unique(iris$Species)[[x]],]
+  x.1 <- c("Especie" = as.character(unique(iris$Species)[[x]]), 
+           "MSepal.Length" = mean(x.1$Sepal.Length),
+           "SDSepal.Length" = sd(x.1$Sepal.Length))
+  return(x.1)
+})
+```
+
+
+Si quiero tener una salida más amigable como un data.frame tendríamos que usar otras funciones, por ejemplo:
+
+```{r}
+library(magrittr)# para usar %>%
+sapply(1:3, function(x){
+  x.1 <- iris[iris$Species == unique(iris$Species)[[x]],]
+  x.1 <- c("Especie" = as.character(unique(iris$Species)[[x]]), 
+           "MSepal.Length" = mean(x.1$Sepal.Length),
+           "SDSepal.Length" = sd(x.1$Sepal.Length))
+  return(x.1)
+}) %>% as.data.frame() %>% t() %>% as.data.frame()
+```
+
+
+**3.** Obtener una lista. Se necesita que las salidas tengan dimensiones distintas, de lo contrario lo juntara en una matriz. 
+
+```{r}
+sapply(3:9, seq)
+```
+
+```{r}
+sapply(1:3, function(x){
+  x.1 <- iris[iris$Species == unique(iris$Species)[[x]],]
+  if(unique(x.1$Species) == "setosa"){
+  x.1 <- c("Especie" = as.character(unique(iris$Species)[[x]]), 
+           "MSepal.Length" = mean(x.1$Sepal.Length))  
+  } else {
+  x.1 <- c("Especie" = as.character(unique(iris$Species)[[x]]), 
+           "MSepal.Length" = mean(x.1$Sepal.Length),
+           "SDSepal.Length" = sd(x.1$Sepal.Length))  
+  }
+  
+  return(x.1)
+})
+```
+
+
+
+## lapply()
+
+La función lapply es una de las funciones más usadas en R, permite realizar iteraciones sobre una lista, array o vector y devuelve siempre una lista. Esto tiene varias ventajas, por ejemplo, que puedes guardar cualquier tipo clase de R.
+
+**Vector**
+```{r}
+lapply(1:3, function(x){
+  x.1 <- iris[iris$Species == unique(iris$Species)[[x]],]
+  
+  x.1 <- c("Especie" = as.character(unique(iris$Species)[[x]]), 
+           "MSepal.Length" = mean(x.1$Sepal.Length),
+           "SDSepal.Length" = sd(x.1$Sepal.Length))  
+  
+  return(x.1)
+})
+
+```
+
+**Data.frame**
+```{r}
+lapply(1:3, function(x){
+  x.1 <- iris[iris$Species == unique(iris$Species)[[x]],]
+  x.1 <- data.frame("Especie" = as.character(unique(iris$Species)[[x]]), 
+           "MSepal.Length" = mean(x.1$Sepal.Length),
+           "SDSepal.Length" = sd(x.1$Sepal.Length))  
+  
+  return(x.1)
+})
+```
+  
+  
+**lista**
+```{r}
+lapply(1:3, function(x){
+  x.1 <- iris[iris$Species == unique(iris$Species)[[x]],]
+  
+  x.1 <- list("Especie" = as.character(unique(iris$Species)[[x]]), 
+           "MSepal.Length" = mean(x.1$Sepal.Length),
+           "SDSepal.Length" = sd(x.1$Sepal.Length))  
+  
+  return(x.1)
+})
+```
+
+
