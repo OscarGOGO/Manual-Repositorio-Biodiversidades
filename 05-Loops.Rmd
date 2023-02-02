@@ -47,13 +47,25 @@ colMeans(iris[,1:4])
 
 **Pero podríamos usar `apply()`**
 
-¿Porqué sale error o NA?
+```{r}
+apply(iris, 2, mean)
+```
+
+**¿Porqué sale error o NA?**
+
+**Para ir tomando ritmo resolvamos los siguientes ejercicios:**
 
 **1) Ahora quiero la raíz cuadrada de la media que previamente es elevada a la 5ta potencia**
 
-**2) El resultado de la raíz cuadrada la quiero multiplicar por 5**
+```{r}
+apply(iris[,1:4], 2, function(x){
+  x.1 <- sqrt(mean(x)^5)
+})
+```
 
-**3) Si el resultado es mayor a 100 que devuelva un 0**
+**2) El resultado de la raíz cuadrada la quiero multiplicar por 15 y dividir entre 2**
+
+**3) Si el resultado es mayor a 1000 que devuelva un 0**
 
 
 ## for()
