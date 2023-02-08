@@ -13,4 +13,7 @@ loops-en-r.-funciones-base-de-r
 apply
 for
 sapply
+tapply
+mapply
 lapply
+repeat

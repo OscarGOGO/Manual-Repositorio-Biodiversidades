@@ -216,6 +216,47 @@ sapply(1:3, function(x){
 
 
 
+
+## tapply()
+La función tapply() aplica una función a un vector *x* y agrupa la salida de acuerdo con un vector *y* del mismo largo. El vector *y* es categórico e idealmente debe tener distintos niveles de factor. 
+
+
+![](images/tapply_1.PNG){width="547"}
+
+
+Ejemplo. 
+
+```{r}
+tapply(iris$Sepal.Width, iris$Species, mean)
+```
+
+## mapply()
+
+La función mapply() puede ser usada bajo la misma logica de sapply pero usando más de un vector. Los vectores iteractuan por posición, es decir, el primer elemento del vector y y el vector 2, seguido del segundo elemento del vector 1 y vector 2, etc.
+
+
+![](images/mapply_1.PNG){width="547"}
+
+
+Ejemplos:
+
+```{r}
+mapply(mean, iris$Sepal.Length, iris$Petal.Length)
+
+mapply(sum, iris$Sepal.Length, iris$Petal.Length, iris$Sepal.Width)
+```
+
+O podría hacer una función:
+
+```{r}
+f <- function(a,b,c) a+b/c
+
+mapply(f, iris$Sepal.Length, iris$Petal.Length, iris$Sepal.Width)
+
+```
+
+
+
 ## lapply()
 
 La función lapply es una de las funciones más usadas en R, permite realizar iteraciones sobre una lista, array o vector y devuelve siempre una lista. Esto tiene varias ventajas, por ejemplo, que puedes guardar cualquier tipo clase de R.
@@ -282,5 +323,37 @@ lapply(1:3, function(x){
   return(x.1)
 })
 ```
+
+
+## repeat{}
+
+Repite instrucciones hasta cumplir una condición. AL cumplir la condición se rompe el loop usando *break*. 
+
+
+![](images/r-repeat-loop.jpg){width="547"}
+
+
+Ejemplo. 
+
+```{r}
+resultado <- vector()
+y = 1
+
+repeat{
+  if(y > 1){
+    x <- sum(c(resultado[1:(y-1)], iris$Sepal.Length[y] + iris$Petal.Length[y]))  
+  } else {
+   x <- iris$Sepal.Length[y] + iris$Petal.Length[y]  
+  }
+  
+  if(x > 100){
+    break
+  } else {
+    resultado[[y]] <- x
+    y <- y + 1
+  }
+}
+```
+
 
 
