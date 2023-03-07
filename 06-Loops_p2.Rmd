@@ -216,7 +216,7 @@ Este grupo de funciones realiza iteraciones sobre una *lista, array o vector* y 
 ![](images/map_varios.PNG){width="200"}
 
 
-###map_dbl()
+### **map_dbl()**
 ```{r}
 map_dbl(1:4, function(x){
   x.1 <- sqrt(mean(iris[[x]])^5)
@@ -224,7 +224,7 @@ map_dbl(1:4, function(x){
 })
 ```
 
-###map_chr()
+### **map_chr()**
 
 
 ```{r}
@@ -235,7 +235,7 @@ map_chr(entrada, function(x){
 ```
 
 
-###map_lgl()
+### **map_lgl()**
 
 
 ```{r}
@@ -267,7 +267,8 @@ walk(1:4, function(i){
 })
 ```
 
-Y sería lo mismo a:
+
+Sería el equivalente a la siguiente instrucción usando funciones base de R:
 
 ```{r}
 invisible(lapply(1:4, function(i){
