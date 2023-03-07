@@ -23,7 +23,7 @@ map_dfr-y-map_dfc
 map_dfr
 map_dfc
 map_dbl-map_chr-y-map_lgl
-walk
 map_dbl
 map_chr
 map_lgl
+walk
