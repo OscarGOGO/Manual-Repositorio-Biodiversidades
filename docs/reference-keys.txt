@@ -17,3 +17,10 @@ tapply
 mapply
 lapply
 repeat
+loops-en-r.-paquete-purrr
+map
+map_dfr-y-map_dfc
+map_dfr
+map_dfc
+map_dbl-map_chr-y-map_lgl
+walk

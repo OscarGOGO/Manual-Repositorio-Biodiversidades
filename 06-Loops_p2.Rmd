@@ -1,0 +1,276 @@
+# Loops en R. Paquete Purrr
+
+El paquete Purrr tiene funciones útiles para seguir implementando la programación funcional en donde la filosofía a grandes rasgos es optimizar código quitando redundancia aplicando loops.  
+
+https://github.com/rstudio/cheatsheets/blob/main/purrr.pdf
+
+Debemos instalar el paquete **purrr**:
+
+```{r eval=FALSE}
+install.packages("purrr", dependencies = TRUE)
+```
+
+Seguiremos usando el conjunto de datos llamado **iris**:
+
+```{r}
+data(iris)
+DT::datatable(iris)
+```
+
+
+## map() 
+
+La función `map` es el simil de `lapply` y es una de las funciones más usadas en **purrr**. La función permite realizar iteraciones sobre una *lista, array o vector* y devuelve siempre una lista. Esto tiene varias ventajas, por ejemplo, que puedes guardar cualquier clase de R.
+
+
+![](images/map_1.PNG){width="547"}
+
+![](images/map_2.PNG){width="547"}
+
+
+```{r}
+library(purrr)
+```
+
+
+**Vector como iteración**
+
+```{r}
+entrada <- 1:3
+map(entrada, function(x){
+  x.1 <- iris[iris$Species == unique(iris$Species)[[x]],]
+  
+  x.1 <- c("Especie" = as.character(unique(iris$Species)[[x]]), 
+           "MSepal.Length" = mean(x.1$Sepal.Length),
+           "SDSepal.Length" = sd(x.1$Sepal.Length))  
+  
+  return(x.1)
+})
+```
+
+
+**lista como iteración**
+
+Imaginemos que previamente hice un proceso que separo las filas de cada especie y las guardo por separado en una lista.
+
+
+```{r}
+entrada <- iris %>% split(iris$Species)
+names(entrada)
+class(entrada)
+```
+
+
+Ahora la lista tiene tres data.frames con los datos de cada especie y la usaremos como entrada en la función map. La lista tiene 3 elementos por lo que hará 3 iteraciones. En la iteración 1 tomará el primer data.frame de la lista, en la iteración 2 el segundo data.frame de la lista y en la iteración 3 tomará el tercer data.frame de la lista. 
+
+
+```{r}
+ejemplo <- map(entrada, function(x){
+  x.1 <- data.frame("Especie" = as.character(unique(x$Species)), 
+           "MSepal.Length" = mean(x$Sepal.Length),
+           "SDSepal.Length" = sd(x$Sepal.Length))  
+  return(x.1)
+})
+
+ejemplo
+```
+
+
+**Colapsar la lista**
+
+Ya que la lista de salida tiene data.frames con columnas con el mismo nombre podemos colapsarlos en un único data.frame usando la función do.call() y rbind(), la ultima indica de que forma se puede colapsar la lista en este caso rbind indica que las apile por filas, de tal forma que las columnas se mantienen integras y lo único que incrementa son las filas.
+
+![](images/docall_rbind.PNG){width="547"}
+
+![](images/docall_cbind.PNG){width="547"}
+
+
+Antes es importante quitar los NULL. En ocasiones cuando algo no ocurre como deseamos en lugar de dejar que falle el loop guardamos el resultado como un NULL, así sabemos que los NULL dentro de nuestra lista son errores. Por ejemplo, supongamos que no queremos tener información de setosa porque sabemos que la información es incorrecta, así que aplicaremos una iteración y cuando lleguemos a esa especie devolverá un NULL. 
+
+
+```{r}
+ejemplo <- map(entrada, function(x){
+  if(unique(x$Species) == "setosa"){
+    x.1 <- NULL
+  } else {
+  x.1 <- data.frame("Especie" = as.character(unique(x$Species)), 
+           "MSepal.Length" = mean(x$Sepal.Length),
+           "SDSepal.Length" = sd(x$Sepal.Length))    
+  }
+  
+  return(x.1)
+})
+ejemplo
+```
+
+Ahora antes de hacer un do.call necesitamos quitar ese NULL, , en este ejemplo es sencillo porque tenemos solo tres elementos pero imaginemos su importancia cuando tengamos docenas, cientos o miles de elementos en nuestra lista. 
+
+Para quitar los NULL podemos recurrir a las funciones base de R:
+
+```{r}
+Filter(Negate(is.null), ejemplo)
+```
+
+
+O podemos usar la función `compact` de purrr
+
+```{r}
+compact(ejemplo)
+```
+
+
+
+```{r}
+ejemplo <- compact(ejemplo)
+do.call(rbind, ejemplo)
+```
+
+También podríamos colapsar la lista por columnas usando la función cbind, de tal forma que la única fila que tenemos se queda integra y lo que cambia es el no. de columnas. 
+
+```{r}
+do.call(cbind, ejemplo)
+```
+
+
+## map_dfr y map_dfc
+
+Para ahorrarnos el paso de usar la función `do.call()` para colapsar las listas en un data.frame podemos usar las funciones `map_dfr()` y `map_dfc()`. 
+
+Es igual a la función map (i.e., tiene la misma estructura y trabaja con vectores, listas, arrays) pero la salida siempre es un **data.frame** lo que implica que en las instrucciones que aplicas en cada iteración el resultado siempre debe ser un **data.frame**. Si la salida es un vector numérico, un vector de caracteres, una lista, array u otra clase entonces te marcará un error.
+
+
+#### **map_dfr()**
+En nuestro ejemplo anterior, esta función sustituye el `do.call(rbind, ejemplo)`. 
+**Nota**. Dejaremos setosa. 
+
+
+![](images/map_dfr.PNG){width="200"}
+
+
+
+**Usando una lista**
+```{r}
+map_dfr(entrada, function(x){
+  x.1 <- data.frame("Especie" = as.character(unique(x$Species)), 
+           "MSepal.Length" = mean(x$Sepal.Length),
+           "SDSepal.Length" = sd(x$Sepal.Length))  
+  return(x.1)
+})
+```
+
+
+**Usando un vector**
+```{r}
+map_dfr(1:3, function(x){
+  x.1 <- iris[iris$Species == unique(iris$Species)[[x]],]
+  
+  x.1 <- c("Especie" = as.character(unique(iris$Species)[[x]]), 
+           "MSepal.Length" = mean(x.1$Sepal.Length),
+           "SDSepal.Length" = sd(x.1$Sepal.Length))  
+  
+  return(x.1)
+})
+```
+
+
+
+### **map_dfc()**
+En nuestro ejemplo anterior, esta función sustituye el `do.call(cbind, ejemplo)`. 
+
+
+![](images/map_dfc.PNG){width="200"}
+
+**Usando una lista**
+```{r}
+map_dfc(entrada, function(x){
+  x.1 <- data.frame("Especie" = as.character(unique(x$Species)), 
+           "MSepal.Length" = mean(x$Sepal.Length),
+           "SDSepal.Length" = sd(x$Sepal.Length))  
+  return(x.1)
+})
+
+```
+
+
+**Usando un vector**
+```{r}
+map_dfc(1:3, function(x){
+  x.1 <- iris[iris$Species == unique(iris$Species)[[x]],]
+  
+  x.1 <- c("Especie" = as.character(unique(iris$Species)[[x]]), 
+           "MSepal.Length" = mean(x.1$Sepal.Length),
+           "SDSepal.Length" = sd(x.1$Sepal.Length))  
+  
+  return(x.1)
+})
+```
+
+
+**¿Y si tenemos NULL de salida o un error en el proceso?**
+
+
+## map_dbl, map_chr y map_lgl
+
+Este grupo de funciones realiza iteraciones sobre una *lista, array o vector* y devuelve **siempre un vector** numérico (map_dbl), carácter (map_chr) o lógico (map_lgl). 
+
+![](images/map_varios.PNG){width="200"}
+
+
+###map_dbl()
+```{r}
+map_dbl(1:4, function(x){
+  x.1 <- sqrt(mean(iris[[x]])^5)
+  return(x.1)
+})
+```
+
+###map_chr()
+
+
+```{r}
+map_chr(entrada, function(x){
+  x.1 <- unique(as.character(unique(x$Species)))
+  return(x.1)
+})
+```
+
+
+###map_lgl()
+
+
+```{r}
+map_lgl(entrada, function(x){
+  x.1 <- unique(as.character(unique(x$Species))) == "setosa"
+  return(x.1)
+})
+```
+
+## walk()
+
+La función Walk() es igual que map pero el resultado no se muestra, es útil cuando en cada iteración guardas, gráficas imprimir algo y no tienes interés en crear un objeto nuevo que gaste memoria RAM.
+
+
+![](images/walk.PNG){width="200"}
+
+```{r}
+par(mfrow=c(2,2))
+walk(1:4, function(i){
+ boxplot(iris[[i]] ~ iris$Species, ylab = names(iris)[i], xlab = "Specie")
+})
+```
+
+
+```{r}
+par(mfrow=c(2,2))
+walk(1:4, function(i){
+ print(i)
+})
+```
+
+Y sería lo mismo a:
+
+```{r}
+invisible(lapply(1:4, function(i){
+    print(i)
+}))
+```
