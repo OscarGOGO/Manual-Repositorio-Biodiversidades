@@ -1,6 +1,8 @@
-# Loops en R. Paquete Purrr
+# Loops en R. Paquete purrr
 
-El paquete Purrr tiene funciones útiles para seguir implementando la programación funcional en donde la filosofía a grandes rasgos es optimizar código quitando redundancia aplicando loops.  
+![](images/purrr.png){width="300"}
+
+El paquete **purrr** tiene funciones útiles para seguir implementando la programación funcional en donde la filosofía a grandes rasgos es optimizar código quitando redundancia aplicando loops.  
 
 https://github.com/rstudio/cheatsheets/blob/main/purrr.pdf
 
@@ -51,7 +53,7 @@ map(entrada, function(x){
 
 **lista como iteración**
 
-Imaginemos que previamente hice un proceso que separo las filas de cada especie y las guardo por separado en una lista.
+Imaginemos que previamente hice un proceso donde separé las filas de cada especie y las guardé por separado en una lista.
 
 
 ```{r}
@@ -103,7 +105,7 @@ ejemplo <- map(entrada, function(x){
 ejemplo
 ```
 
-Ahora antes de hacer un do.call necesitamos quitar ese NULL, , en este ejemplo es sencillo porque tenemos solo tres elementos pero imaginemos su importancia cuando tengamos docenas, cientos o miles de elementos en nuestra lista. 
+Ahora antes de hacer un `do.call()` necesitamos quitar el elemento NULL de nuestra lista. En este ejemplo es sencillo porque tenemos solo tres elementos pero imaginemos su importancia cuando tengamos docenas, cientos o miles de elementos en nuestra lista. 
 
 Para quitar los NULL podemos recurrir a las funciones base de R:
 
