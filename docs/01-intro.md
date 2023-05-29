@@ -92,7 +92,6 @@ Se deben considerar al menos 4 cosas:
 
 ![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/21.png){width="600"}
 
-**6. Podemos ver los cambios haciendo click en `Diff` o en `Commit` seguido de Changes:**
-![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/22.png){width="600"}
+**6. Podemos ver los cambios haciendo click en `Diff` o en `Commit` seguido de Changes:** ![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/22.png){width="600"}
 
 ![](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/_book/images/23.png){width="600"}
