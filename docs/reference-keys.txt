@@ -39,3 +39,12 @@ future_map_dbl
 future_map_chr
 future_map_lgl
 incluir-una-condicional-para-detectar-posibles-errores
+consultas-al-cat-usando-zacatuche-y-r
+cargar-paquetes-o-instalarlos
+cargar-funciones-usando-un-environment
+funciones-generales
+catalogoclass
+parámetros
+ejemplos
+funciones-para-consultar-al-cat-del-snib
+ejemplos-1

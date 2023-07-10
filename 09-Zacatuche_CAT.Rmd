@@ -1,0 +1,243 @@
+# Consultas al CAT usando zacatuche y R
+
+[](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/images/Zacatuche.png){width="591"}
+
+## Cargar paquetes o instalarlos
+
+```{r}
+list.of.packages <- c("stars", "sf", "raster", "terra", "rmapshaper", "purrr",
+                      "progress", "magrittr", "ghql", "dplyr", 
+                      "parallel", "jsonlite", "future", "furrr")
+
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages, dependencies = TRUE)
+purrr::walk(list.of.packages, function(x){suppressPackageStartupMessages(library(x, character.only = TRUE,
+                                                                                 warn.conflicts = FALSE,  quietly = TRUE))})
+
+```
+
+## Cargar funciones usando un environment
+
+```{r}
+load("L:/BiodiversidadES/01_Conocimiento/01_Diversidad_biologica/04_Funciones/CAT_SNIB_env.RData") 
+```
+
+
+## Funciones generales
+
+### *CatalogoClass()*
+
+```{r eval = FALSE}
+CAT_SNIB_ENVI$CatalogoClass(grupo_verificado = NULL,
+                            tabla = NULL,
+                            taxon = NULL,
+                            reino = NULL,
+                            categoria_taxonomica = NULL,
+                            categoria_busqueda = NULL,
+                            multiple_lista = FALSE)
+```
+
+La función ayuda a construir los parámetros de consulta al zacatuche de forma fácil y ordenada. Si alguno de los parámetros necesarios para la consulta es incorrecto o falta, entonces mostrará un mensaje de error. Está función es usada para consultar al CAT y al SNIB ejemplares por lo que es muy importante conocer su funcionamiento y estructura.
+
+#### **Parámetros**
+
+-   **grupo_verificado** = *character*. Grupos taxonómicos definidos con la ayuda de la SCAT de la CONABIO. Se puede elegir una de las cuatro propuestas para agrupar los táxones: "grupo1", "grupo2", "grupo3" o taxon y "grupo4" o reino, o seleccionar uno o varios de los táxones que se encuentran en Grupos_consulta, por ejemplo: "Hongos" o algo más especifico como "Ascomycota".
+
+La tabla de grupos taxonómicos puede consultarse de la siguiente forma:
+
+```{r eval = FALSE}
+CAT_SNIB_ENVI$Grupos_consulta
+```
+
+```{r echo=FALSE}
+DT::datatable(CAT_SNIB_ENVI$Grupos_consulta)
+```
+
+-   **tabla** = *`data.frame`*. Una tabla con cuatro columnas, dos obligatorias: `Taxon` = Taxón que se consulta en el CAT; `Reino` = Reino al que pertenece el taxón que se consulta. Y dos opcionales: `Categoría taxonómica` = Categoría taxonómica del taxón que se consulta (e.g., subespecie, especie, género, familia, clase, suborden, orden); `Categoría del taxon de búsqueda` = Por default se entiende que se busca información a nivel de especie (e.g., especies del taxón que se consulta), pero en esta columna se puede especificar si la información que se consulta se requiere a otro nivel (e.g., colocar la palabra 'género' te devolverá información sobre los géneros del taxón que se consulta). [*El nombre de las columnas no es importante, el orden sí.*]{.underline}
+
+-   **taxon** = *`character`*. Si solo consultas información de un grupo taxonómico puedes colocar su nombre aquí y deberás usar los tres parámetros siguientes, dos de ellos opcionales.
+
+-   **reino** = *`character`*. Indica el reino al que pertenece el taxón que se busca.
+
+-   **categoria_taxonomica** = *`character`*. Opcional, indica la categoría taxonómica del taxón que se busca, por ejemplo, subespecie, especie, género, familia, clase, suborden u orden, es decir, si mi taxon es '*Panthera onca*' puedo especificar en esta columna que se trata de una 'especie'.
+
+-   **categoria_busqueda** = *`character`*. Opcional, indica la categoría taxonómica del taxón que se busca, por ejemplo, subespecie, especie, género, familia, clase, suborden u orden, es decir, si se coloca 'género' te devolverá información sobre los géneros del taxón que se consulta.
+
+#### Ejemplos
+
+1.  Usando una tabla que previamente se pudo cargar con `read.csv`, `read.table`, `read_csv` u otras funciones. Las columnas de la table deben mantener el mismo orden que la tabla de abajo, es decir, taxón, reino, categoría taxonómica, categoría de búsqueda.
+
+En el ejemplo se busca información a nivel de **especie** para el orden **Carnivora** que pertenece al reino **Animalia** y de la familia **Fagaceae** que pertenece al reino **Plantae**
+
+```{r}
+tabla_consulta <- data.frame(taxon = c("Carnivora", "Fagaceae"),
+                             reino = c("Animalia", "Plantae"),
+                             categoria_taxonomica = c("orden", "familia"),
+                             categoria_busqueda = c("especie", "especie"))
+tabla_consulta 
+```
+
+```{r}
+entrada_consulta <- CAT_SNIB_ENVI$CatalogoClass(tabla = tabla_consulta)
+entrada_consulta
+```
+
+2.  Usando alguno de los grupos que se encuentran en la tabla **Grupos_consulta** (ver parámetros) y que ya fueron verificados por el SCAT
+
+```{r}
+#Alguno de los grupos que ya fueron verificados
+entrada_consulta <- CAT_SNIB_ENVI$CatalogoClass(grupo_verificado = "Vertebrados")
+
+entrada_consulta[[10]]
+```
+
+3.  Buscando un solo taxón o grupo taxonómico. En los ejemplos primero se consultan las especies del orden Carnívora y después la información de la especie *Tapirus bairdii*.
+
+```{r}
+entrada_consulta <- CAT_SNIB_ENVI$CatalogoClass(taxon = "Carnivora", 
+                                                reino = "Animalia",
+                                                categoria_taxonomica = "orden",
+                                                categoria_busqueda = "especie")
+entrada_consulta
+```
+
+```{r}
+entrada_consulta <- CAT_SNIB_ENVI$CatalogoClass(taxon = "Tapirus bairdii",
+                                                reino = "Animalia",
+                                                categoria_taxonomica = "especie", categoria_busqueda = "especie")
+entrada_consulta
+```
+
+
+## Funciones para consultar al CAT del SNIB
+
+La función principal es **`taxon_CAT`** y realiza la consulta al zacatuche y aplica filtros para descartar especies exóticas e invasoras, duplicados, o identificadores con NA. Estos filtros son opcionales. Los parámetros son:
+
+-   **consulta_CAT**. *`Clase consulta`*, puede ser una lista de consultas. Ver [CatalogoClass()]
+
+-   **remover_exotica_invasora**. *`logical`*`, default = TRUE`. Remover (TRUE) especies exóticas e invasoras de la tabla final.
+
+-   **solo_nativas_endemicas**. *`logical`*`, default = FALSE`. Quedarte solo con las especies marcadas como nativas y endémicas (TRUE). Se tiene el riesgo de quitar especies que no han sido evaluadas y cuyo campo aparece como vacío, es decir, `""`.
+
+-   **remover_duplicados**. *`logical`*`, default = TRUE`. Remover (TRUE) ids validos duplicados.
+
+-   **intern**. *`logical`*`, default = TRUE`. Observar el progreso de la consulta.
+
+-   **parallel**. *`numeric`*`, default = NULL`. Si se quiere paralelizar entonces se debe proporcionar el número de núcleos con los que se quiere trabajar. Queda a criterio del usuario para no saturar la máquina.
+
+La función depende de las siguientes funciones:
+
+1.  `Consulta_searchTaxon`: genera una consulta y un cliente (conexión a graphql) para zacatuche.
+
+2.  `met_1`**:** hace la consulta a zacatuche GraphQL. Es apropiada para consultas que devuelvan menos de 9,000 registros del CAT.
+
+3.  `met_2`**:** hace la consulta a zacatuche GraphQL. Es apropiada para consultas que devuelvan más de 9,000 registros del CAT. Se usa un loop de tipo `repeat{}` y en cada iteracción se descarga un maximo de 8,000 registros para no saturar a Zacatuche graphQL. El repeat puede ser paralelizado.
+
+4.  `busqueda_CAT`: corre la función `Consulta_serachTaxon` para conectarse a zacatuche y consultar al CAT del SNIB y para eso corre las funciones `met_1` y `met_2`. Si son varias consultas entonces usa un `lapply()` o paraleliza el proceso usando `future_map()` de la librería `furrr`.
+
+5.  `tabla_CAT`**:** Arregla y estructura los datos en un data.frame. La salida de la consulta realizada al zacatuche es primero json y después una lista, la función tabla_CAT transforma la lista y sublistas en un data.frame y filtra la información para eliminar registros con campos vacíos, sin id, que pertenecen a un Reino distinto al consultado, etc.
+
+![**Flujo de trabajo de la función taxon_CAT()**](C:/Users/ogodinez/Documents/CnM/PruebaLibro/Libro_Prueba1/images/CAT_1.png){width="591"}
+
+#### Ejemplos
+
+**1.**  Usando una tabla que previamente se pudo cargar con `read.csv`, `read.table`, `read_csv` u otras funciones. Las columnas de la table deben mantener el mismo orden que la tabla de abajo, es decir, taxón, reino, categoría taxonómica, categoría de búsqueda.
+
+En el ejemplo se busca información a nivel de **especie** para el orden **Carnivora** que pertenece al reino **Animalia** y de la familia **Fagaceae** que pertenece al reino **Plantae**
+
+```{r}
+tabla_consulta <- data.frame(taxon = c("Carnivora", "Fagaceae"),
+                             reino = c("Animalia", "Plantae"),
+                             categoria_taxonomica = c("orden", "familia"),
+                             categoria_busqueda = c("especie", "especie"))
+tabla_consulta
+```
+```{r eval=FALSE}
+entrada_consulta <- CAT_SNIB_ENVI$CatalogoClass(tabla = tabla_consulta)
+
+resultado_consulta <- CAT_SNIB_ENVI$taxon_CAT(consulta_CAT = entrada_consulta,
+                                              remover_exotica_invasora = TRUE,
+                                              remover_duplicados = TRUE, intern = FALSE)
+```
+
+
+Ver resultado:
+
+```{r echo = TRUE, eval = FALSE}
+resultado_consulta
+```
+
+```{r echo = FALSE, eval=FALSE}
+DT::datatable(resultado_consulta, options = list(pageLength = 5, autoWidth = TRUE))
+```
+
+
+**2.**  Usando alguno de los grupos que se encuentran en la tabla **Grupos_consulta** (ver parámetros) y que ya fueron verificados por el SCAT
+
+```{r echo = TRUE, eval = FALSE}
+#Alguno de los grupos que ya fueron verificados
+entrada_consulta <- CAT_SNIB_ENVI$CatalogoClass(grupo_verificado = "Anfibios")
+
+resultado_consulta <- CAT_SNIB_ENVI$taxon_CAT(consulta_CAT = entrada_consulta,
+                                              remover_exotica_invasora = TRUE,
+                                              remover_duplicados = TRUE, intern = FALSE)
+```
+
+Ver resultado:
+
+```{r echo = TRUE, eval = FALSE}
+resultado_consulta
+```
+
+```{r echo = FALSE, eval=FALSE}
+DT::datatable(resultado_consulta, options = list(pageLength = 5, autoWidth = TRUE))
+```
+
+
+**3.**  Buscando un solo taxón o grupo taxonómico. En los ejemplos primero se consultan las especies del orden Carnívora y después la información de la especie *Tapirus bairdii*.
+
+```{r eval=FALSE}
+entrada_consulta <- CAT_SNIB_ENVI$CatalogoClass(taxon = "Carnivora", 
+                                                reino = "Animalia",
+                                                categoria_taxonomica = "orden",
+                                                categoria_busqueda = "especie")
+
+Carnivoros <- CAT_SNIB_ENVI$taxon_CAT(consulta_CAT = entrada_consulta, 
+                                      remover_exotica_invasora = TRUE, 
+                                      remover_duplicados = TRUE)
+Carnivoros
+```
+
+```{r echo = TRUE, eval = FALSE}
+entrada_consulta <- CAT_SNIB_ENVI$CatalogoClass(taxon = "Carnivora", 
+                                                reino = "Animalia",
+                                                categoria_taxonomica = "orden",
+                                                categoria_busqueda = "especie")
+
+Carnivoros <- CAT_SNIB_ENVI$taxon_CAT(consulta_CAT = entrada_consulta, 
+                                      remover_exotica_invasora = TRUE, 
+                                      remover_duplicados = TRUE, intern = FALSE)
+
+Carnivoros
+```
+
+
+
+```{r eval=FALSE}
+entrada_consulta <- CAT_SNIB_ENVI$CatalogoClass(taxon = "Tapirus bairdii", reino = "Animalia", categoria_taxonomica = "especie", categoria_busqueda = "especie")
+
+tapir <- CAT_SNIB_ENVI$taxon_CAT(consulta_CAT = entrada_consulta, 
+                                 remover_exotica_invasora = TRUE, 
+                                 remover_duplicados = TRUE)
+tapir
+```
+
+
+```{r echo=FALSE, eval=FALSE}
+entrada_consulta <- CAT_SNIB_ENVI$CatalogoClass(taxon = "Tapirus bairdii", reino = "Animalia", categoria_taxonomica = "especie", categoria_busqueda = "especie")
+
+tapir <- CAT_SNIB_ENVI$taxon_CAT(consulta_CAT = entrada_consulta, 
+                                 remover_exotica_invasora = TRUE, 
+                                 remover_duplicados = TRUE, intern = FALSE)
+DT::datatable(tapir)
+```                           

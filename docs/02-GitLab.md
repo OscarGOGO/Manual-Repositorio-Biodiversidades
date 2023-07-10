@@ -14,8 +14,6 @@ Paso 1. Crear nuevo repositorio en GitLab
 Paso 1. Crear nuevo repositorio en GitHub
 
 
-
-
 **2. Configurar proyecto o repositorio**
 
 Se deben considerar al menos 4 cosas:
