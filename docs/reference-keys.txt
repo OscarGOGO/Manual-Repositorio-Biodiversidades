@@ -48,3 +48,8 @@ parámetros
 ejemplos
 funciones-para-consultar-al-cat-del-snib
 ejemplos-1
+consulta-de-snib-registros-usando-zacatuche-y-r
+usando-id-valido
+usando-nombre-cientifico
+podemos-buscar-varias-especies
+podemos-alterar-la-busqueda

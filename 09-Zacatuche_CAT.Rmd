@@ -196,7 +196,7 @@ DT::datatable(resultado_consulta, options = list(pageLength = 5, autoWidth = TRU
 
 **3.**  Buscando un solo taxón o grupo taxonómico. En los ejemplos primero se consultan las especies del orden Carnívora y después la información de la especie *Tapirus bairdii*.
 
-```{r eval=FALSE}
+```{r echo = TRUE, eval=FALSE}
 entrada_consulta <- CAT_SNIB_ENVI$CatalogoClass(taxon = "Carnivora", 
                                                 reino = "Animalia",
                                                 categoria_taxonomica = "orden",
@@ -205,19 +205,6 @@ entrada_consulta <- CAT_SNIB_ENVI$CatalogoClass(taxon = "Carnivora",
 Carnivoros <- CAT_SNIB_ENVI$taxon_CAT(consulta_CAT = entrada_consulta, 
                                       remover_exotica_invasora = TRUE, 
                                       remover_duplicados = TRUE)
-Carnivoros
-```
-
-```{r echo = TRUE, eval = FALSE}
-entrada_consulta <- CAT_SNIB_ENVI$CatalogoClass(taxon = "Carnivora", 
-                                                reino = "Animalia",
-                                                categoria_taxonomica = "orden",
-                                                categoria_busqueda = "especie")
-
-Carnivoros <- CAT_SNIB_ENVI$taxon_CAT(consulta_CAT = entrada_consulta, 
-                                      remover_exotica_invasora = TRUE, 
-                                      remover_duplicados = TRUE, intern = FALSE)
-
 Carnivoros
 ```
 
@@ -233,11 +220,133 @@ tapir
 ```
 
 
-```{r echo=FALSE, eval=FALSE}
+# Consulta de SNIB registros usando zacatuche y R
+
+
+## Usando ID valido
+
+Aquí el parámetro buscar_CAT puede ser igual a FALSE, es decir no hace falta consultar al CAT para obtener los id validos porque previamente los obtuve
+
+```{r eval = FALSE}
+ Tapir <- tryCatch(CAT_SNIB_ENVI$taxon_coordenadas(consulta_SNIB = tapir$Valido.id,
+                                                            remover_exotica_invasora = TRUE,
+                                                            remover_duplicados = TRUE,
+                                                            filtros = list(pais = "MEXICO", 
+                                                                           anio_min = NULL, 
+                                                                           anio_max = NULL,
+                                                                           rem_novalPais = TRUE,
+                                                                           rem_novalEdo = TRUE,
+                                                                           rem_novalMun = FALSE,
+                                                                           rem_novalLoc = FALSE),
+                                                            parallel = 4,
+                                                            intern = FALSE,
+                                                            messages = FALSE,
+                                                            tabla_TipoDistribucion = TRUE,
+                                                            returnCAT = FALSE, 
+                                                            buscar_CAT = FALSE,
+                                                            save_RDS = NULL), error = function(err)err)
+```
+
+
+## Usando Nombre cientifico
+
+Con esta opción tenemos que dar el valor de TRUE al parámetro *buscar_cat* para que busqué el id valido.
+
+```{r eval = FALSE}
 entrada_consulta <- CAT_SNIB_ENVI$CatalogoClass(taxon = "Tapirus bairdii", reino = "Animalia", categoria_taxonomica = "especie", categoria_busqueda = "especie")
 
-tapir <- CAT_SNIB_ENVI$taxon_CAT(consulta_CAT = entrada_consulta, 
-                                 remover_exotica_invasora = TRUE, 
-                                 remover_duplicados = TRUE, intern = FALSE)
-DT::datatable(tapir)
-```                           
+ Tapir.2 <- tryCatch(CAT_SNIB_ENVI$taxon_coordenadas(consulta_SNIB = entrada_consulta,
+                                                            remover_exotica_invasora = TRUE,
+                                                            remover_duplicados = TRUE,
+                                                            filtros = list(pais = "MEXICO", 
+                                                                           anio_min = NULL, 
+                                                                           anio_max = NULL,
+                                                                           rem_novalPais = TRUE,
+                                                                           rem_novalEdo = TRUE,
+                                                                           rem_novalMun = FALSE,
+                                                                           rem_novalLoc = FALSE),
+                                                            parallel = NULL,
+                                                            intern = FALSE,
+                                                            messages = FALSE,
+                                                            tabla_TipoDistribucion = TRUE,
+                                                            returnCAT = FALSE, 
+                                                            buscar_CAT = TRUE,
+                                                            save_RDS = NULL), error = function(err)err)
+```
+
+
+
+
+
+## Podemos buscar varias especies
+
+```{r eval = FALSE}
+entrada_consulta <- CAT_SNIB_ENVI$CatalogoClass(taxon = c("Tapirus bairdii", "Manilkara zapota"), 
+                                                reino = c("Animalia", "Plantae"),
+                                                categoria_taxonomica = "especie",
+                                                categoria_busqueda = "especie")
+
+ varios <- tryCatch(CAT_SNIB_ENVI$taxon_coordenadas(consulta_SNIB = entrada_consulta,
+                                                            remover_exotica_invasora = TRUE,
+                                                            remover_duplicados = TRUE,
+                                                            terrestres = TRUE,
+                                                            dulceacuicola = TRUE,
+                                                            marinas = FALSE,
+                                                            filtros = list(pais = "MEXICO", 
+                                                                           anio_min = NULL, 
+                                                                           anio_max = NULL,
+                                                                           rem_novalPais = TRUE,
+                                                                           rem_novalEdo = TRUE,
+                                                                           rem_novalMun = FALSE,
+                                                                           rem_novalLoc = FALSE),
+                                                            parallel = NULL,
+                                                            intern = FALSE,
+                                                            messages = FALSE,
+                                                            tabla_TipoDistribucion = TRUE,
+                                                            returnCAT = FALSE, 
+                                                            buscar_CAT = TRUE,
+                                                            save_RDS = NULL), error = function(err)err)
+
+```
+
+
+## Podemos alterar la busqueda 
+
+```{r eval = FALSE}
+Ejemplares_query <- CAT_SNIB_ENVI$Consulta_searchEjemplar(DATOS_URL = "http://zacatuche2.conabio.gob.mx:4000/graphql",
+                                                          idnombrecat = c("id", "taxon"),
+                                                          taxonValido = c("id", "taxon"),
+                                                          ejemplar = c("latitud", "longitud", "aniocolecta", "validacionambiente",
+                                                                       "geovalidacion", "exoticainvasora", "nivelprioridad",
+                                                                       "nom059", "iucn", "cites", "endemismo",
+                                                                       "paiscoleccion", "paismapa",
+                                                                       "especie", "especievalida",
+                                                                       "grupobio"))
+
+entrada_consulta <- CAT_SNIB_ENVI$CatalogoClass(taxon = c("Tapirus bairdii", "Manilkara zapota"), 
+                                                reino = c("Animalia", "Plantae"),
+                                                categoria_taxonomica = "especie",
+                                                categoria_busqueda = "especie")
+
+ varios <- tryCatch(CAT_SNIB_ENVI$taxon_coordenadas(consulta_SNIB = entrada_consulta,
+                                                            remover_exotica_invasora = TRUE,
+                                                            remover_duplicados = TRUE,
+                                                            filtros = list(pais = "MEXICO", 
+                                                                           anio_min = NULL, 
+                                                                           anio_max = NULL,
+                                                                           rem_novalPais = TRUE,
+                                                                           rem_novalEdo = TRUE,
+                                                                           rem_novalMun = FALSE,
+                                                                           rem_novalLoc = FALSE),
+                                                            parallel = NULL,
+                                                            intern = FALSE,
+                                                            messages = FALSE,
+                                                            Ejemplares_query = Ejemplares_query,
+                                                            tabla_TipoDistribucion = TRUE,
+                                                            returnCAT = FALSE, 
+                                                            buscar_CAT = TRUE,
+                                                            save_RDS = NULL), error = function(err)err)
+```
+
+
+
